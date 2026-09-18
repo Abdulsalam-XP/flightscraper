@@ -1,0 +1,15 @@
+.env
+output/
+__pycache__/
+*.pyc
+.playwright/
+node_modules/
+*.egg-info/
+.venv/
+venv/
+.wwebjs_auth/
+.wwebjs_cache/
+package.json
+package-lock.json
+send.js
+whatsapp/

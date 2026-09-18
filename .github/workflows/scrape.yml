@@ -1,0 +1,39 @@
+name: Flight Scraper
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      test_run:
+        description: "Test mode: only scan the first 2 dates"
+        type: boolean
+        default: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - run: playwright install chromium --with-deps
+      - name: Run scraper
+        env:
+          SCRAPER: google
+          HEADLESS: "true"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TEST_RUN: ${{ inputs.test_run || secrets.TEST_RUN }}
+        run: python main.py
+      - name: Upload CSV and failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-output
+          path: output/
+          retention-days: 7
+          if-no-files-found: ignore
