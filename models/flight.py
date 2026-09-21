@@ -29,6 +29,9 @@ class TripResult(BaseModel):
     inbound: Flight
     total_price_aed: float
     total_price_sek: Optional[float] = None
+    total_price_usd: Optional[float] = None
+    # False = inbound times are placeholders (the return leg was never looked up)
+    return_times_known: bool = False
 
     @property
     def trip_duration_days(self) -> int:

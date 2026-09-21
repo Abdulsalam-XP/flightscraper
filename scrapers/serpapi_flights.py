@@ -88,6 +88,7 @@ def _parse_option(option: dict, origin: str, destination: str, dep_date: date, r
             outbound=outbound,
             inbound=inbound,
             total_price_aed=total_aed,
+            total_price_usd=price_usd or None,
         )
 
     except Exception as e:
